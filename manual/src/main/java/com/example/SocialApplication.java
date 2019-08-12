@@ -57,11 +57,17 @@ public class SocialApplication extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// @formatter:off
-		http.antMatcher("/**").authorizeRequests().antMatchers("/", "/login**", "/webjars/**", "/error**").permitAll().anyRequest()
-				.authenticated().and().exceptionHandling()
-				.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/")).and().logout()
-				.logoutSuccessUrl("/").permitAll().and().csrf()
-				.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and()
+		http
+			.antMatcher("/**").authorizeRequests()
+			.antMatchers("/", "/login**", "/webjars/**", "/error**").permitAll()
+			.anyRequest().authenticated().and().exceptionHandling()
+				.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/"))
+			.and()
+				.logout()
+				.logoutSuccessUrl("/").permitAll()
+			.and()
+				.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+			.and()
 				.addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class);
 		// @formatter:on
 	}
@@ -70,6 +76,11 @@ public class SocialApplication extends WebSecurityConfigurerAdapter {
 		SpringApplication.run(SocialApplication.class, args);
 	}
 
+	/**
+	 * the oauth2 filter that used to redirect to the authorization server
+	 * @param filter
+	 * @return
+	 */
 	@Bean
 	public FilterRegistrationBean<OAuth2ClientContextFilter> oauth2ClientFilterRegistration(OAuth2ClientContextFilter filter) {
 		FilterRegistrationBean<OAuth2ClientContextFilter> registration = new FilterRegistrationBean<OAuth2ClientContextFilter>();
@@ -78,15 +89,28 @@ public class SocialApplication extends WebSecurityConfigurerAdapter {
 		return registration;
 	}
 
+	/**
+	 * the setup filter for handling the oauth2 login processing
+	 * 
+	 * in the example below, it is triggered by accesssing the endpoint /login/facebook
+	 * 
+	 * @return
+	 */
 	private Filter ssoFilter() {
-		OAuth2ClientAuthenticationProcessingFilter facebookFilter = new OAuth2ClientAuthenticationProcessingFilter(
-				"/login/facebook");
+		OAuth2ClientAuthenticationProcessingFilter facebookFilter 
+			= new OAuth2ClientAuthenticationProcessingFilter("/login/facebook");
+		
 		OAuth2RestTemplate facebookTemplate = new OAuth2RestTemplate(facebook(), oauth2ClientContext);
+		
 		facebookFilter.setRestTemplate(facebookTemplate);
+		
 		UserInfoTokenServices tokenServices = new UserInfoTokenServices(facebookResource().getUserInfoUri(),
 				facebook().getClientId());
+		
 		tokenServices.setRestTemplate(facebookTemplate);
+		
 		facebookFilter.setTokenServices(tokenServices);
+		
 		return facebookFilter;
 	}
 

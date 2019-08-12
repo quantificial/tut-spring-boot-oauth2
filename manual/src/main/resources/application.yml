@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 facebook:
   client:
     clientId: 424008441544428
@@ -13,3 +14,20 @@ facebook:
 logging:
   level:
     org.springframework.security: DEBUG
+=======
+facebook:
+  client:
+    clientId: 424008441544428
+    clientSecret: 987c3c87ff62fbcd1e43e5483cc7c39b
+    accessTokenUri: https://graph.facebook.com/oauth/access_token
+    userAuthorizationUri: https://www.facebook.com/dialog/oauth
+    tokenName: oauth_token
+    authenticationScheme: query
+    clientAuthenticationScheme: form
+  resource:
+    userInfoUri: https://graph.facebook.com/me
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+>>>>>>> ccdd3dd15247ef549b2a62690af1d15a4f3b7457

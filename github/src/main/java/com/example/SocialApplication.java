@@ -126,13 +126,21 @@ public class SocialApplication extends WebSecurityConfigurerAdapter {
 	}
 
 	private Filter ssoFilter(ClientResources client, String path) {
-		OAuth2ClientAuthenticationProcessingFilter oAuth2ClientAuthenticationFilter = new OAuth2ClientAuthenticationProcessingFilter(path);
+		
+		OAuth2ClientAuthenticationProcessingFilter oAuth2ClientAuthenticationFilter 
+			= new OAuth2ClientAuthenticationProcessingFilter(path);
+		
 		OAuth2RestTemplate oAuth2RestTemplate = new OAuth2RestTemplate(client.getClient(), oauth2ClientContext);
+		
 		oAuth2ClientAuthenticationFilter.setRestTemplate(oAuth2RestTemplate);
+		
 		UserInfoTokenServices tokenServices = new UserInfoTokenServices(client.getResource().getUserInfoUri(),
 				client.getClient().getClientId());
+		
 		tokenServices.setRestTemplate(oAuth2RestTemplate);
+		
 		oAuth2ClientAuthenticationFilter.setTokenServices(tokenServices);
+		
 		return oAuth2ClientAuthenticationFilter;
 	}
 
