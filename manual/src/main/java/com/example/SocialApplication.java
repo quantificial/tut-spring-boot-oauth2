@@ -53,7 +53,7 @@ public class SocialApplication extends WebSecurityConfigurerAdapter {
 	public Principal user(Principal principal) {
 		return principal;
 	}
-
+	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// @formatter:off
@@ -65,9 +65,14 @@ public class SocialApplication extends WebSecurityConfigurerAdapter {
 			.and()
 				.logout()
 				.logoutSuccessUrl("/").permitAll()
+				.logoutSuccessUrl("http://localhost:8081/auth/exit")
 			.and()
-				.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-			.and()
+				.csrf().disable()
+			//.and()
+			//	.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+			;
+		
+			http
 				.addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class);
 		// @formatter:on
 	}
@@ -86,7 +91,7 @@ public class SocialApplication extends WebSecurityConfigurerAdapter {
 
 	private Filter ssoFilter() {
 		OAuth2ClientAuthenticationProcessingFilter facebookFilter = new OAuth2ClientAuthenticationProcessingFilter(
-				"/login/facebook");
+				"/login/sso");
 		OAuth2RestTemplate facebookTemplate = new OAuth2RestTemplate(facebook(), oauth2ClientContext);
 		facebookFilter.setRestTemplate(facebookTemplate);
 		UserInfoTokenServices tokenServices = new UserInfoTokenServices(facebookResource().getUserInfoUri(),

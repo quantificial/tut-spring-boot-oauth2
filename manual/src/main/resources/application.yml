@@ -1,14 +1,21 @@
+server:
+  port: 8084
+  servlet:
+    session:
+      timeout: 5s
+#      cookie:
+#        max-age: 10s
 facebook:
   client:
-    clientId: 424008441544428
-    clientSecret: 987c3c87ff62fbcd1e43e5483cc7c39b
-    accessTokenUri: https://graph.facebook.com/oauth/access_token
-    userAuthorizationUri: https://www.facebook.com/dialog/oauth
-    tokenName: oauth_token
-    authenticationScheme: query
-    clientAuthenticationScheme: form
+    clientId: app3
+    clientSecret: secret
+    accessTokenUri: http://localhost:8081/auth/oauth/token
+    userAuthorizationUri: http://localhost:8081/auth/oauth/authorize
+#    tokenName: oauth_token
+#    authenticationScheme: query
+#    clientAuthenticationScheme: form
   resource:
-    userInfoUri: https://graph.facebook.com/me
+    userInfoUri: http://localhost:8081/auth/user/me
 
 logging:
   level:
