@@ -2,9 +2,11 @@ server:
   port: 8084
   servlet:
     session:
-      timeout: 5s
-#      cookie:
-#        max-age: 10s
+      timeout: 5m
+      #cookie:
+      #  max-age: 10s
+  #session:
+    #timeout: 10s
 facebook:
   client:
     clientId: app3

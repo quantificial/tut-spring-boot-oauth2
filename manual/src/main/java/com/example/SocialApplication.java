@@ -45,6 +45,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @EnableOAuth2Client
 public class SocialApplication extends WebSecurityConfigurerAdapter {
+	
+
 
 	@Autowired
 	OAuth2ClientContext oauth2ClientContext;
@@ -53,7 +55,7 @@ public class SocialApplication extends WebSecurityConfigurerAdapter {
 	public Principal user(Principal principal) {
 		return principal;
 	}
-	
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// @formatter:off
